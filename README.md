@@ -1,25 +1,12 @@
-# English365
+# English365 v1.1
 
-Aplicación personal de inglés B2: vocabulario, gramática y tarjetas de repaso.
+Aplicación personal de vocabulario y gramática B2 con flashcards y repetición espaciada básica. Sin Supabase.
 
-## Publicar con GitHub Pages
-1. Subir todos los archivos a la **raíz** del repositorio `english365`.
-2. Abrir **Settings → Pages**.
-3. En **Build and deployment**, seleccionar **Deploy from a branch**.
-4. Seleccionar `main` y `/ (root)` y guardar.
-5. Abrir la dirección publicada por GitHub Pages (normalmente `https://TU-USUARIO.github.io/english365/`).
-
-## Datos y sincronización
-No hay servidor ni cuentas. Los avances se guardan en `localStorage` del navegador, por dispositivo y por origen web. Desde Inicio, **Exportar progreso** crea una copia JSON; en otro dispositivo, **Importar progreso** reemplaza sus datos actuales. Antes de importar, exporta una copia del progreso del dispositivo de destino. No existe sincronización automática ni combinación de progresos.
-
-## Flashcards
-Algoritmo sencillo propio de repetición espaciada, **no FSRS**. Las cuatro calificaciones cambian la fecha de repaso. "Otra vez" programa un repaso en aproximadamente un minuto, pero no lo inserta de nuevo en la sesión actual. El repaso se realiza al volver a entrar. El sistema se podrá mejorar más adelante.
+## Actualización desde v1.0
+Sube y sustituye `content.js`, `app.js` y `sw.js` en la raíz de GitHub. El progreso sigue en `localStorage` bajo la misma clave `english365_progress_v1`; **no borres los datos del navegador**. Antes de actualizar, exporta una copia del progreso desde la app.
 
 ## Contenido
-24 tarjetas de vocabulario B2, 6 lecciones de gramática y 18 preguntas gramaticales iniciales. Las preguntas de completar frases sustituyen la expresión inglesa dentro del ejemplo. Algunos ejemplos pueden ser más fáciles que B2; es una base ampliable.
-
-## Instalación
-En iPhone: abrir en Safari → Compartir → Añadir a pantalla de inicio. En Mac: abrir en navegador; Safari permite añadir a Dock en versiones compatibles. Se puede usar parcialmente sin conexión después de la primera carga, gracias al service worker.
+64 tarjetas B2 y 12 temas de gramática, con 36 preguntas. Los ejercicios de completar frases usan únicamente ejemplos que contienen la expresión exacta.
 
 ## Privacidad
-Los archivos del repositorio y el contenido de estudio son públicos en GitHub Pages. Los avances locales no se suben a GitHub. No publiques copias de seguridad de tu progreso en el repositorio.
+El progreso se almacena localmente en cada navegador. Para transferirlo entre dispositivos, exporta e importa el archivo JSON. Importar sustituye el progreso del dispositivo de destino.
