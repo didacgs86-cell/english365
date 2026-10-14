@@ -1,14 +1,8 @@
-# English365 v2.1
+# English365 v2.2
 
-Actualización incremental desde v2.0.
+Actualización centrada en gramática B2: 12 temas con explicaciones ampliadas, ejemplos traducidos, errores frecuentes y 2 preguntas nuevas por tema (60 preguntas en total). Se mantienen 112 tarjetas y las categorías de vocabulario.
 
-- 112 tarjetas de vocabulario (64 anteriores + 48 nuevas), 8 categorías temáticas.
-- Botón para aprender hasta 10 tarjetas nuevas por sesión; opción para ver todas.
-- Se mantienen los 12 temas de gramática y las 36 preguntas existentes.
-- Se conserva `english365_progress_v1` y los identificadores v01-v64.
-- Corrección del mezclado aleatorio de preguntas.
+## Instalación
+Exporta antes tu progreso JSON. Sustituye `content.js`, `app.js` y `sw.js` en la raíz de GitHub. La clave local `english365_progress_v1` y los IDs de vocabulario/gramática se conservan.
 
-## Actualizar
-Antes de actualizar, exporta el progreso a un archivo JSON. Sube `content.js`, `app.js` y `sw.js` a la raíz del repositorio GitHub, reemplazando las versiones anteriores. No borres los datos del navegador.
-
-El contenido es de elaboración propia, sin materiales copiados de cursos comerciales. Los repasos utilizan un algoritmo sencillo de intervalos, no FSRS.
+El algoritmo de repaso sigue siendo básico, no FSRS. El progreso permanece local al navegador.
