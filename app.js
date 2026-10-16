@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const DATA=window.ENGLISH_CONTENT,KEY='english365_progress_v1',app=document.getElementById('app');
-const defaults=()=>({version:1,cards:{},grammar:{},updatedAt:new Date().toISOString()});
+const defaults=()=>({version:1,cards:{},grammar:{},practice:{},updatedAt:new Date().toISOString()});
 let state=load(),session=null,cardTimer=null;
 if(!state.practice||typeof state.practice!=='object')state.practice={};
 function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&x.version===1&&typeof x.cards==='object'&&typeof x.grammar==='object')return x}catch(e){}return defaults()}
@@ -20,8 +20,10 @@ const CAT_ICONS=['🧩','🔤','📦','✨','🔗','💬','🩺','✈️','💼'
 const TYPE_CATEGORIES=['Phrasal verbs','Verbos','Sustantivos','Adjetivos','Conectores','Collocations y expresiones'];
 const THEME_CATEGORIES=['Salud y medicina','Viajes y turismo','Trabajo y empresa','Medio ambiente','Sociedad y actualidad','Educación','Cultura y arte'];
 const CATEGORY_MAP=Object.fromEntries([...TYPE_CATEGORIES,...THEME_CATEGORIES].map(k=>[k,k]));
-const OLD_TYPES={ 'Phrasal verbs':'Phrasal verbs','Verbs':'Verbos','Nouns':'Sustantivos','Adjectives':'Adjetivos','Connectors':'Conectores' };
-const OLD_THEMES={
+// Clasificación explícita por tarjeta: una etiqueta lingüística y una temática opcional.
+// Las tarjetas históricas mantienen sus identificadores para preservar el progreso.
+const OLD_TYPES={'Phrasal verbs':'Phrasal verbs','Verbs':'Verbos','Nouns':'Sustantivos','Adjectives':'Adjetivos','Connectors':'Conectores','Expressions':'Collocations y expresiones'};
+const LEGACY_THEMES={
  'Salud y medicina':['Breakthrough','Trial','Side effect','To diagnose','Findings','To recover'],
  'Viajes y turismo':['Itinerary','Accommodation','Delay','Landmark','To explore','To get around'],
  'Trabajo y empresa':['Workload','Promotion','To negotiate','Revenue','To resign','To meet a deadline','Deadline'],
@@ -30,13 +32,12 @@ const OLD_THEMES={
  'Educación':['Assignment','Feedback','To revise','Curriculum','Scholarship','To acquire'],
  'Cultura y arte':['Exhibition','Heritage','Plot','Masterpiece','Performance','To portray']
 };
-function categoryCards(name){return DATA.vocab.filter(c=>{
- if(TYPE_CATEGORIES.includes(name)){
-  if(name==='Collocations y expresiones')return c.category===name || c.category==='Expressions';
-  return OLD_TYPES[c.category]===name;
- }
- return c.category===name || (OLD_THEMES[name]||[]).includes(c.en);
-})}
+const THEME_BY_WORD=new Map(Object.entries(LEGACY_THEMES).flatMap(([theme,words])=>words.map(w=>[w,theme])));
+DATA.vocab.forEach(c=>{
+ c.wordType=c.wordType||OLD_TYPES[c.category]|| (TYPE_CATEGORIES.includes(c.category)?c.category:'');
+ c.theme=c.theme||(THEME_CATEGORIES.includes(c.category)?c.category:THEME_BY_WORD.get(c.en)||'');
+});
+function categoryCards(name){return DATA.vocab.filter(c=>TYPE_CATEGORIES.includes(name)?c.wordType===name:c.theme===name)}
 function vocabHome(){clear();nav();title('Vocabulario B2','Elige por tipo de palabra o por tema. Cada tarjeta pertenece a una categoría coherente.');const search=el('input','field');search.placeholder='Buscar categoría o palabra...';app.append(search);const grid=el('div','category-grid');app.append(grid);function draw(){grid.replaceChildren();Object.keys(CATEGORY_MAP).forEach((name,i)=>{const cards=categoryCards(name);if(!cards.length || (!name.toLowerCase().includes(search.value.toLowerCase())&&!cards.some(c=>c.en.toLowerCase().includes(search.value.toLowerCase()))))return;const b=el('button','category-card');add(b,el('span','category-icon',CAT_ICONS[i]),el('span','category-title',name),el('small','',cards.length+' palabras · '+cards.filter(c=>state.cards[c.id]).length+' estudiadas'),el('span','category-arrow','›'));b.onclick=()=>categoryHome(name);grid.append(b)})}search.oninput=draw;draw()}
 function categoryHome(name){const cards=categoryCards(name);clear();nav('Categorías',vocabHome);title(name,`${cards.length} palabras B2. Aprende primero el significado y luego practica.`);const p=panel();add(p,el('h3','','1 · Aprender con flashcards'),el('p','','Descubre la traducción y el ejemplo. Después indica cuánto recuerdas cada palabra.'),btn('Aprender 10 tarjetas',()=>startCards(cards.filter(c=>!state.cards[c.id]).slice(0,10).length?cards.filter(c=>!state.cards[c.id]).slice(0,10):cards.filter(c=>cardState(c.id).due<=Date.now()).slice(0,10))),btn('Ver todas las tarjetas',()=>startCards(cards),'btn secondary'));app.append(p);const modes=el('div','mode-grid spaced');[['📝','Tipo test','Elige el significado correcto',()=>startVocabQuiz(cards,()=>categoryHome(name))],['✏️','Completar frases','Con pista en español y respuesta vinculada a este tema',()=>startFill(cards,()=>categoryHome(name))],['🔤','Traducción','Escribe la expresión en inglés',()=>startTranslation(cards,()=>categoryHome(name))],['🎯','Recuerdo activo','Escribe la palabra inglesa a partir de su significado',()=>startRecall(cards,()=>categoryHome(name))]].forEach(([ico,t,desc,fn])=>{const b=el('button','mode-card');add(b,el('span','',ico),el('strong','',t),el('small','',desc));b.onclick=fn;modes.append(b)});app.append(modes);const p2=panel();p2.classList.add('spaced');add(p2,el('h3','','Palabras de este tema'));cards.forEach(c=>{const d=el('div','word-row');add(d,el('strong','',c.en),el('span','',c.es));p2.append(d)});app.append(p2)}
 function startCards(cards){
@@ -73,35 +74,37 @@ function renderCard(){
 // Algoritmo propio y sencillo de repetición espaciada; no es FSRS.
 function rateCard(id,rating){const old=cardState(id),x={...old};x.reps++;if(rating===0){x.step=0;x.interval=0;x.lapses++;x.due=Date.now()+60*1000}else if(rating===1){x.step=Math.max(1,x.step);x.interval=Math.max(1,Math.round((x.interval||1)*1.3));x.due=Date.now()+x.interval*86400000}else if(rating===2){x.step++;x.interval=x.interval===0?1:x.interval===1?3:Math.round(x.interval*2.2);x.due=Date.now()+x.interval*86400000}else{x.step++;x.interval=x.interval===0?4:Math.max(4,Math.round(x.interval*3));x.due=Date.now()+x.interval*86400000}state.cards[id]=x;save();return x}
 function shuffle(a){const out=[...a];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out}
-function startVocabQuiz(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards).slice(0,10).map(c=>{const pool=DATA.vocab.filter(x=>x.id!==c.id&&x.es!==c.es);const wrong=shuffle(pool).slice(0,3).map(x=>x.es);return {q:`¿Qué significa “${c.en}”?`,options:shuffle([c.es,...wrong]),answer:c.es,why:c.example+' — '+c.es}});startQuiz(items,'Vocabulario',back)}
-function startFill(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards.filter(c=>new RegExp(escapeReg(c.en),'i').test(c.example))).slice(0,10).map(c=>({q:c.example.replace(new RegExp(escapeReg(c.en),'i'),'_____'),answer:c.en,hint:c.es,why:`${c.en} = ${c.es}. ${c.example}`}));session={kind:'fill',items,index:0,score:0,back};renderFill()}
-function startTranslation(cards,back){const items=shuffle(cards).slice(0,10).map(c=>({q:`Escribe en inglés: ${c.es}`,answer:c.en,hint:'Usa la expresión estudiada en este tema.',why:c.example}));session={kind:'fill',items,index:0,score:0,back,translation:true};renderFill()}
+function startVocabQuiz(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards).slice(0,10).map(c=>{const pool=DATA.vocab.filter(x=>x.id!==c.id&&x.es!==c.es);const wrong=shuffle(pool).slice(0,3).map(x=>x.es);return {id:c.id,q:`¿Qué significa “${c.en}”?`,options:shuffle([c.es,...wrong]),answer:c.es,why:c.example+' — '+c.es}});startQuiz(items,'Vocabulario',back)}
+function startFill(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards.filter(c=>new RegExp(escapeReg(c.en),'i').test(c.example))).slice(0,10).map(c=>({id:c.id,q:c.example.replace(new RegExp(escapeReg(c.en),'i'),'_____'),answer:c.en,hint:c.es,why:`${c.en} = ${c.es}. ${c.example}`}));session={kind:'fill',items,index:0,score:0,back};renderFill()}
+function startTranslation(cards,back){const items=shuffle(cards).slice(0,10).map(c=>({id:c.id,q:`Escribe en inglés: ${c.es}`,answer:c.en,hint:'Usa la expresión estudiada en este tema.',why:c.example}));session={kind:'fill',items,index:0,score:0,back,translation:true};renderFill()}
 function startRecall(cards,back){
  const items=shuffle(cards).slice(0,10).map(c=>({id:c.id,q:`¿Cómo se dice en inglés: ${c.es}?`,answer:c.en,hint:`Ejemplo: ${c.example.replace(new RegExp(escapeReg(c.en),'i'),'_____')}`,why:`${c.en} — ${c.example}`}));
- session={kind:'fill',items,index:0,score:0,back,recall:true,missed:[],retry:false};renderFill();
+ session={kind:'fill',items,index:0,score:0,back,recall:true,missed:[],retry:false,firstScore:null,firstTotal:items.length};renderFill();
 }
 function recordPractice(id,ok){if(!id)return;const x=state.practice[id]||{correct:0,wrong:0};x[ok?'correct':'wrong']++;state.practice[id]=x;save()}
 function escapeReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
-function normalize(s){return s.trim().toLocaleLowerCase('en').replace(/[.!?]+$/,'').replace(/\s+/g,' ')}
+function normalize(s){return String(s).trim().toLocaleLowerCase('en').replace(/[.!?]+$/,'').replace(/\s+/g,' ').replace(/^[“”"']+|[“”"']+$/g,'')}
+function acceptedAnswers(x){const answers=[x.answer,...(x.alternatives||[])];const noTo=answers.flatMap(a=>/^to /i.test(a)?[a,a.replace(/^to /i,'')]:[a]);return [...new Set(noTo.map(normalize))]}
+function isAccepted(value,x){return acceptedAnswers(x).includes(normalize(value))}
 function renderFill(){
  clear();const s=session;nav('Categoría',s.back||vocabHome);
  if(s.index>=s.items.length){
   if(s.recall&&!s.retry&&s.missed.length){
    const missed=s.missed;clear();nav('Categoría',s.back||vocabHome);title('Segunda oportunidad',`Has acertado ${s.score} de ${s.items.length}. Ahora practicarás de nuevo las ${missed.length} palabras falladas.`);
-   app.append(btn('Repetir las falladas',()=>{s.items=shuffle(missed);s.index=0;s.retry=true;s.score=0;renderFill()}));return;
+   app.append(btn('Repetir las falladas',()=>{s.firstScore=s.score;s.items=shuffle(missed);s.index=0;s.retry=true;s.score=0;renderFill()}));return;
   }
-  endQuiz(s.recall?'Recuerdo activo':s.translation?'Traducción':'Completar frases',s.score,s.items.length,s.back||vocabHome);return;
+  endQuiz(s.recall?'Recuerdo activo':s.translation?'Traducción':'Completar frases',s.score,s.items.length,s.back||vocabHome,s.retry?`Primera ronda: ${s.firstScore}/${s.firstTotal}. Segunda oportunidad: ${s.score}/${s.items.length}.`:null);return;
  }
  const x=s.items[s.index];title(s.recall?'Recuerdo activo':s.translation?'Traducción':'Completar frases',`Ejercicio ${s.index+1} de ${s.items.length}`);
  const p=panel();add(p,el('div','question',x.q),el('p','hint',s.recall?x.hint:s.translation?'Traduce la expresión al inglés.':'Pista · '+x.hint+' (palabra de esta categoría)'));
  const input=el('input','field');input.placeholder='Tu respuesta';input.autocomplete='off';const result=el('div');
- const check=btn('Comprobar',()=>{if(!input.value.trim())return;const ok=normalize(input.value)===normalize(x.answer);if(ok)s.score++;else if(s.recall&&!s.retry)s.missed.push(x);if(s.recall)recordPractice(x.id,ok);
+ const check=btn('Comprobar',()=>{if(!input.value.trim())return;const ok=isAccepted(input.value,x);if(ok)s.score++;else if(s.recall&&!s.retry)s.missed.push(x);recordPractice(x.id,ok);
   result.replaceChildren(el('div',`answer ${ok?'':'bad'}`,`${ok?'✓ Correcto':'✗ Respuesta esperada: '+x.answer}. ${x.why}`),btn('Siguiente →',()=>{s.index++;renderFill()}));check.disabled=true;input.disabled=true});
  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!check.disabled)check.click()});add(p,input,check,result);app.append(p);input.focus();
 }
 function startQuiz(items,name,back,grammarId){session={kind:'quiz',items,index:0,score:0,name,back,grammarId};renderQuiz()}
-function renderQuiz(){clear();const s=session;nav(s.name==='Gramática'?'Gramática':'Vocabulario',s.back);if(s.index>=s.items.length){if(s.grammarId){const prior=state.grammar[s.grammarId]||{attempts:0,best:0};state.grammar[s.grammarId]={attempts:prior.attempts+1,best:Math.max(prior.best,s.score)};save()}endQuiz(s.name,s.score,s.items.length,s.back);return}const x=s.items[s.index];title(s.name,`Pregunta ${s.index+1} de ${s.items.length}`);const p=panel();p.append(el('div','question',x.q));const choices=el('div','choices'),feedback=el('div');x.options.forEach(option=>{const b=btn(option,()=>{const ok=option===x.answer;if(ok)s.score++;Array.from(choices.children).forEach(y=>{y.disabled=true;if(y.textContent===x.answer)y.classList.add('correct');else if(y===b)y.classList.add('wrong')});feedback.replaceChildren(el('div',`answer ${ok?'':'bad'}`,`${ok?'✓ Correcto':'✗ Incorrecto. Respuesta: '+x.answer}. ${x.why}`),btn('Siguiente →',()=>{s.index++;renderQuiz()}))},'choice');choices.append(b)});add(p,choices,feedback);app.append(p)}
-function endQuiz(name,score,total,back){clear();nav('Volver',back);title('Ejercicios completados',`${name} · ${score} de ${total} respuestas correctas`);const p=panel();add(p,el('h2','',`${Math.round(score/total*100)}% de aciertos`),el('p','','Puedes repetir los ejercicios para seguir practicando.'),btn('Volver',back));app.append(p)}
+function renderQuiz(){clear();const s=session;nav(s.name==='Gramática'?'Gramática':'Vocabulario',s.back);if(s.index>=s.items.length){if(s.grammarId){const prior=state.grammar[s.grammarId]||{attempts:0,best:0};state.grammar[s.grammarId]={attempts:prior.attempts+1,best:Math.max(prior.best,s.score)};save()}endQuiz(s.name,s.score,s.items.length,s.back);return}const x=s.items[s.index];title(s.name,`Pregunta ${s.index+1} de ${s.items.length}`);const p=panel();p.append(el('div','question',x.q));const choices=el('div','choices'),feedback=el('div');x.options.forEach(option=>{const b=btn(option,()=>{const ok=option===x.answer;if(ok)s.score++;if(s.name==='Vocabulario')recordPractice(x.id,ok);Array.from(choices.children).forEach(y=>{y.disabled=true;if(y.textContent===x.answer)y.classList.add('correct');else if(y===b)y.classList.add('wrong')});feedback.replaceChildren(el('div',`answer ${ok?'':'bad'}`,`${ok?'✓ Correcto':'✗ Incorrecto. Respuesta: '+x.answer}. ${x.why}`),btn('Siguiente →',()=>{s.index++;renderQuiz()}))},'choice');choices.append(b)});add(p,choices,feedback);app.append(p)}
+function endQuiz(name,score,total,back,details=null){clear();nav('Volver',back);title('Ejercicios completados',`${name} · ${score} de ${total} respuestas correctas`);const p=panel();add(p,el('h2','',`${Math.round(score/total*100)}% de aciertos`),el('p','',details||'Puedes repetir los ejercicios para seguir practicando.'),btn('Volver',back));app.append(p)}
 function grammarHome(){clear();nav();title('Gramática B2','Selecciona un tema para leer la explicación y practicar.');const topics=el('div','topics');DATA.grammar.forEach(g=>{const b=el('button','topic');const record=state.grammar[g.id];add(b,el('strong','',g.title),el('span','',record?`Mejor resultado: ${record.best}/${g.questions.length}`:`${g.questions.length} ejercicios`));b.onclick=()=>grammarLesson(g);topics.append(b)});app.append(topics)}
 function grammarLesson(g){clear();nav('Gramática',grammarHome);title(g.title,'Explicación y ejemplos originales de nivel B2.');const p=panel();add(p,el('h3','','Regla'),el('p','lesson',g.intro));if(g.keyPoint)add(p,el('h3','','Cómo distinguirlo'),el('p','lesson',g.keyPoint));add(p,el('h3','','Ejemplos'));const ul=el('ul','lesson');g.examples.forEach(x=>ul.append(el('li','',x)));p.append(ul);if(g.translatedExamples){add(p,el('h3','','Ejemplos traducidos'));const translated=el('ul','lesson');g.translatedExamples.forEach(x=>translated.append(el('li','',x)));p.append(translated)}if(g.pitfall){add(p,el('h3','','Error frecuente'),el('p','hint',g.pitfall))}add(p,btn('Empezar ejercicios',()=>{const items=g.questions.map(([q,options,correct,why])=>({q,options,answer:options[correct],why}));startQuiz(items,'Gramática',()=>grammarLesson(g),g.id)}));app.append(p)}
 function reviewHome(){clear();nav();title('Repaso','Primero recupera palabras ya estudiadas; después puedes aprender otras nuevas.');
@@ -110,13 +113,13 @@ function reviewHome(){clear();nav();title('Repaso','Primero recupera palabras ya
  const r=el('div','row');const review=btn(`Repasar pendientes (${pending.length})`,()=>startCards(pending.slice(0,20)));review.disabled=!pending.length;
  const learn=btn(`Aprender 10 nuevas (${Math.min(10,newCards.length)})`,()=>startCards(newCards.slice(0,10)),'btn secondary');learn.disabled=!newCards.length;add(r,review,learn);p.append(r);app.append(p);
  const difficult=DATA.vocab.filter(c=>state.practice[c.id]&&state.practice[c.id].wrong>state.practice[c.id].correct).sort((a,b)=>(state.practice[b.id].wrong-state.practice[b.id].correct)-(state.practice[a.id].wrong-state.practice[a.id].correct));
- if(difficult.length){const weak=panel();weak.classList.add('spaced');add(weak,el('h3','','Palabras que más te cuestan'),el('p','',`${difficult.length} palabras con más errores que aciertos en ejercicios de recuerdo activo.`),btn('Practicar palabras difíciles',()=>startRecall(difficult.slice(0,10),reviewHome)));app.append(weak)}
+ if(difficult.length){const weak=panel();weak.classList.add('spaced');add(weak,el('h3','','Palabras que más te cuestan'),el('p','',`${difficult.length} palabras con más errores que aciertos en los ejercicios de vocabulario.`),btn('Practicar palabras difíciles',()=>startRecall(difficult.slice(0,10),reviewHome)));app.append(weak)}
  const p2=panel();p2.classList.add('spaced');add(p2,el('h3','','Próximas tarjetas programadas'));
  const upcoming=DATA.vocab.filter(c=>state.cards[c.id]&&cardState(c.id).due>now).sort((a,b)=>cardState(a.id).due-cardState(b.id).due).slice(0,8);
  if(!upcoming.length)p2.append(el('p','muted','Todavía no hay repasos futuros programados.'));
  upcoming.forEach(c=>{const diff=cardState(c.id).due-Date.now(),time=diff<3600000?`${Math.ceil(diff/60000)} min`:diff<86400000?`${Math.ceil(diff/3600000)} h`:`${Math.ceil(diff/86400000)} día(s)`;p2.append(el('p','',`${c.en} · en ${time}`))});app.append(p2)
 }
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`english365-progreso-${new Date().toISOString().slice(0,10)}.json`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-document.getElementById('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2e6)throw Error('El archivo es demasiado grande.');const x=JSON.parse(await file.text());if(!x||x.version!==1||!x.cards||!x.grammar||typeof x.cards!=='object'||Array.isArray(x.cards)||typeof x.grammar!=='object'||Array.isArray(x.grammar))throw Error('Formato no compatible.');for(const v of Object.values(x.cards)){if(!v||typeof v.due!=='number'||!Number.isFinite(v.due)||typeof v.reps!=='number')throw Error('Datos de tarjetas no válidos.')}if(!confirm('Importar sustituirá el progreso guardado en este dispositivo. ¿Continuar?'))return;state={version:1,cards:x.cards,grammar:x.grammar,updatedAt:new Date().toISOString()};save();home();alert('Progreso importado correctamente.')}catch(err){alert('No se pudo importar: '+err.message)}finally{e.target.value=''}});
+document.getElementById('importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>2e6)throw Error('El archivo es demasiado grande.');const x=JSON.parse(await file.text());if(!x||x.version!==1||!x.cards||!x.grammar||typeof x.cards!=='object'||Array.isArray(x.cards)||typeof x.grammar!=='object'||Array.isArray(x.grammar))throw Error('Formato no compatible.');for(const v of Object.values(x.cards)){if(!v||typeof v.due!=='number'||!Number.isFinite(v.due)||typeof v.reps!=='number')throw Error('Datos de tarjetas no válidos.')}if(!confirm('Importar sustituirá el progreso guardado en este dispositivo. ¿Continuar?'))return;state={version:1,cards:x.cards,grammar:x.grammar,practice:(x.practice&&typeof x.practice==='object'&&!Array.isArray(x.practice))?x.practice:{},updatedAt:new Date().toISOString()};save();home();alert('Progreso importado correctamente.')}catch(err){alert('No se pudo importar: '+err.message)}finally{e.target.value=''}});
 window.addEventListener('hashchange',()=>{if(location.hash==='#home')home()});if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));home();
 })();
