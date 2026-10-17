@@ -75,16 +75,38 @@ function renderCard(){
 function rateCard(id,rating){const old=cardState(id),x={...old};x.reps++;if(rating===0){x.step=0;x.interval=0;x.lapses++;x.due=Date.now()+60*1000}else if(rating===1){x.step=Math.max(1,x.step);x.interval=Math.max(1,Math.round((x.interval||1)*1.3));x.due=Date.now()+x.interval*86400000}else if(rating===2){x.step++;x.interval=x.interval===0?1:x.interval===1?3:Math.round(x.interval*2.2);x.due=Date.now()+x.interval*86400000}else{x.step++;x.interval=x.interval===0?4:Math.max(4,Math.round(x.interval*3));x.due=Date.now()+x.interval*86400000}state.cards[id]=x;save();return x}
 function shuffle(a){const out=[...a];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]]}return out}
 function startVocabQuiz(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards).slice(0,10).map(c=>{const pool=DATA.vocab.filter(x=>x.id!==c.id&&x.es!==c.es);const wrong=shuffle(pool).slice(0,3).map(x=>x.es);return {id:c.id,q:`¿Qué significa “${c.en}”?`,options:shuffle([c.es,...wrong]),answer:c.es,why:c.example+' — '+c.es}});startQuiz(items,'Vocabulario',back)}
-function startFill(cards=DATA.vocab,back=vocabHome){const items=shuffle(cards.filter(c=>new RegExp(escapeReg(c.en),'i').test(c.example))).slice(0,10).map(c=>({id:c.id,q:c.example.replace(new RegExp(escapeReg(c.en),'i'),'_____'),answer:c.en,hint:c.es,why:`${c.en} = ${c.es}. ${c.example}`}));session={kind:'fill',items,index:0,score:0,back};renderFill()}
+// Cada ejercicio de huecos usa la forma REAL que aparece en la frase.
+// Para verbos flexionados y expresiones con «to», se define la solución contextual.
+const CLOZE_FORMS={
+ v02:'carried out',v03:'came across',v04:'look into',v05:'ran out of',
+ v21:'figured out',v22:'brought up',v23:'copes',v24:'achieved',
+ v25:'get along with',v26:'turned down',v27:'set up',v28:'take over',
+ v29:'pointed out',v32:'came up with',v33:'deal with',v34:'prevent',
+ v35:'requires',v36:'assume',v37:'enhance',v38:'struggles',v39:'overcame',
+ v186:'enrol',v198:'take a break',v199:'pay attention',v201:'took part in',
+ v202:'keep an eye on',v203:'in charge of',v204:'made the most of',v205:'get in touch'
+};
+function clozeItem(c){
+ const form=CLOZE_FORMS[c.id]||c.en;
+ const re=new RegExp(escapeReg(form),'i');
+ if(!re.test(c.example))return null;
+ return {id:c.id,q:c.example.replace(re,'_____'),answer:form,hint:c.es,
+  why:`Forma en esta frase: ${form}. Expresión de referencia: ${c.en} = ${c.es}. ${c.example}`};
+}
+function startFill(cards=DATA.vocab,back=vocabHome){
+ const items=shuffle(cards.map(clozeItem).filter(Boolean)).slice(0,10);
+ session={kind:'fill',items,index:0,score:0,back};renderFill();
+}
 function startTranslation(cards,back){const items=shuffle(cards).slice(0,10).map(c=>({id:c.id,q:`Escribe en inglés: ${c.es}`,answer:c.en,hint:'Usa la expresión estudiada en este tema.',why:c.example}));session={kind:'fill',items,index:0,score:0,back,translation:true};renderFill()}
 function startRecall(cards,back){
- const items=shuffle(cards).slice(0,10).map(c=>({id:c.id,q:`¿Cómo se dice en inglés: ${c.es}?`,answer:c.en,hint:`Ejemplo: ${c.example.replace(new RegExp(escapeReg(c.en),'i'),'_____')}`,why:`${c.en} — ${c.example}`}));
+ const items=shuffle(cards).slice(0,10).map(c=>({id:c.id,q:`¿Cómo se dice en inglés: ${c.es}?`,answer:c.en,hint:`Ejemplo: ${(clozeItem(c)||{q:c.example}).q}`,why:`${c.en} — ${c.example}`}));
  session={kind:'fill',items,index:0,score:0,back,recall:true,missed:[],retry:false,firstScore:null,firstTotal:items.length};renderFill();
 }
 function recordPractice(id,ok){if(!id)return;const x=state.practice[id]||{correct:0,wrong:0};x[ok?'correct':'wrong']++;state.practice[id]=x;save()}
 function escapeReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 function normalize(s){return String(s).trim().toLocaleLowerCase('en').replace(/[.!?]+$/,'').replace(/\s+/g,' ').replace(/^[“”"']+|[“”"']+$/g,'')}
-function acceptedAnswers(x){const answers=[x.answer,...(x.alternatives||[])];const noTo=answers.flatMap(a=>/^to /i.test(a)?[a,a.replace(/^to /i,'')]:[a]);return [...new Set(noTo.map(normalize))]}
+const SPELLING_VARIANTS={'to enrol':['to enroll','enroll'],'enrol':['enroll'],'to travel':['to travel']};
+function acceptedAnswers(x){const answers=[x.answer,...(x.alternatives||[]),...(SPELLING_VARIANTS[normalize(x.answer)]||[])];const noTo=answers.flatMap(a=>/^to /i.test(a)?[a,a.replace(/^to /i,'')]:[a]);return [...new Set(noTo.map(normalize))]}
 function isAccepted(value,x){return acceptedAnswers(x).includes(normalize(value))}
 function renderFill(){
  clear();const s=session;nav('Categoría',s.back||vocabHome);
@@ -104,7 +126,7 @@ function renderFill(){
 }
 function startQuiz(items,name,back,grammarId){session={kind:'quiz',items,index:0,score:0,name,back,grammarId};renderQuiz()}
 function renderQuiz(){clear();const s=session;nav(s.name==='Gramática'?'Gramática':'Vocabulario',s.back);if(s.index>=s.items.length){if(s.grammarId){const prior=state.grammar[s.grammarId]||{attempts:0,best:0};state.grammar[s.grammarId]={attempts:prior.attempts+1,best:Math.max(prior.best,s.score)};save()}endQuiz(s.name,s.score,s.items.length,s.back);return}const x=s.items[s.index];title(s.name,`Pregunta ${s.index+1} de ${s.items.length}`);const p=panel();p.append(el('div','question',x.q));const choices=el('div','choices'),feedback=el('div');x.options.forEach(option=>{const b=btn(option,()=>{const ok=option===x.answer;if(ok)s.score++;if(s.name==='Vocabulario')recordPractice(x.id,ok);Array.from(choices.children).forEach(y=>{y.disabled=true;if(y.textContent===x.answer)y.classList.add('correct');else if(y===b)y.classList.add('wrong')});feedback.replaceChildren(el('div',`answer ${ok?'':'bad'}`,`${ok?'✓ Correcto':'✗ Incorrecto. Respuesta: '+x.answer}. ${x.why}`),btn('Siguiente →',()=>{s.index++;renderQuiz()}))},'choice');choices.append(b)});add(p,choices,feedback);app.append(p)}
-function endQuiz(name,score,total,back,details=null){clear();nav('Volver',back);title('Ejercicios completados',`${name} · ${score} de ${total} respuestas correctas`);const p=panel();add(p,el('h2','',`${Math.round(score/total*100)}% de aciertos`),el('p','',details||'Puedes repetir los ejercicios para seguir practicando.'),btn('Volver',back));app.append(p)}
+function endQuiz(name,score,total,back,details=null){clear();nav('Volver',back);title('Ejercicios completados',`${name} · ${score} de ${total} respuestas correctas`);const p=panel();add(p,el('h2','',`${total?Math.round(score/total*100):0}% de aciertos`),el('p','',details||'Puedes repetir los ejercicios para seguir practicando.'),btn('Volver',back));app.append(p)}
 function grammarHome(){clear();nav();title('Gramática B2','Selecciona un tema para leer la explicación y practicar.');const topics=el('div','topics');DATA.grammar.forEach(g=>{const b=el('button','topic');const record=state.grammar[g.id];add(b,el('strong','',g.title),el('span','',record?`Mejor resultado: ${record.best}/${g.questions.length}`:`${g.questions.length} ejercicios`));b.onclick=()=>grammarLesson(g);topics.append(b)});app.append(topics)}
 function grammarLesson(g){clear();nav('Gramática',grammarHome);title(g.title,'Explicación y ejemplos originales de nivel B2.');const p=panel();add(p,el('h3','','Regla'),el('p','lesson',g.intro));if(g.keyPoint)add(p,el('h3','','Cómo distinguirlo'),el('p','lesson',g.keyPoint));add(p,el('h3','','Ejemplos'));const ul=el('ul','lesson');g.examples.forEach(x=>ul.append(el('li','',x)));p.append(ul);if(g.translatedExamples){add(p,el('h3','','Ejemplos traducidos'));const translated=el('ul','lesson');g.translatedExamples.forEach(x=>translated.append(el('li','',x)));p.append(translated)}if(g.pitfall){add(p,el('h3','','Error frecuente'),el('p','hint',g.pitfall))}add(p,btn('Empezar ejercicios',()=>{const items=g.questions.map(([q,options,correct,why])=>({q,options,answer:options[correct],why}));startQuiz(items,'Gramática',()=>grammarLesson(g),g.id)}));app.append(p)}
 function reviewHome(){clear();nav();title('Repaso','Primero recupera palabras ya estudiadas; después puedes aprender otras nuevas.');
