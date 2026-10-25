@@ -1,0 +1,10 @@
+English365 · Integración de vocabulario B2
+
+1. Abre el repositorio didacgs86-cell/english365 en GitHub.
+2. Arrastra a la raíz los archivos index.html y vocabulario-b2-pdf.js de esta carpeta (no la carpeta en sí).
+3. Al subirlos, GitHub te preguntará si quieres reemplazar index.html: confirma.
+4. Haz clic en Commit changes y recarga English365.
+
+Añade 1.350 tarjetas de las 19 páginas del PDF. No elimina el vocabulario anterior. Reutiliza las tarjetas, botones de dificultad y progreso guardado de English365. Las clasificaciones gramaticales son aproximadas. El material del PDF contiene algunas erratas y equivalencias discutibles; se han transcrito sin corrección editorial integral. Algunas tarjetas del PDF carecen de una frase de ejemplo y mostrarán la página original en su lugar.
+
+IMPORTANTE: Son dos archivos sueltos en la raíz junto a app.js y content.js. No subas el ZIP directamente a GitHub Pages.
