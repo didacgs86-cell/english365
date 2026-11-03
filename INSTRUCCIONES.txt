@@ -1,0 +1,14 @@
+English365: palabras clasificadas
+Cambio preparado sobre main, commit 69e0626be211e03899442aead1214ef6fa6bdca7.
+Todavía NO publicado: GitHub rechazó la escritura (403, Resource not accessible by integration).
+
+Para aplicarlo manualmente: reemplaza los cuatro archivos de este ZIP en la raíz del repositorio english365 y confirma los cambios. Tras publicarse GitHub Pages, cierra y vuelve a abrir la app o recarga dos veces. No borres los datos del navegador.
+
+Fácil: carpeta Ya me las sé, excluida de las sesiones habituales de flashcards.
+Difícil / Otra vez: carpetas para estudiar a voluntad.
+Bien: mantiene la repetición espaciada.
+Acceso: Mis palabras clasificadas, tanto en Repaso/Vocabulario como en Mi vocabulario B2 PDF.
+Desde Ya me las sé se puede devolver una palabra al repaso.
+La última valoración determina su carpeta. Las respuestas históricas mantienen sus intervalos, pero no se pueden clasificar retrospectivamente porque no guardaban el botón pulsado.
+Se mantiene la misma clave de almacenamiento y el formato de exportación/importación.
+Comprobado: sintaxis y pruebas funcionales de clasificación, persistencia, exclusión de archivadas y devolución al repaso en ambas pantallas. No se pudo ejecutar la revisión visual con navegador en este entorno.
