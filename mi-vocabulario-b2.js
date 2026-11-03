@@ -28,15 +28,19 @@ function next(){clear();const i=queue.findIndex(x=>x.ready<=Date.now());if(i<0){
  function draw(){flip.replaceChildren(E('small','',flipped?'TRADUCCIÓN':'INGLÉS'),E('strong','',flipped?c.es:c.en),E('small','',flipped?'Fácil: archivar · Difícil / Otra vez: guardar para repasar':'Toca para ver la respuesta'));controls.replaceChildren();if(flipped){const r=E('div','ratings');['Otra vez','Difícil','Bien','Fácil'].forEach((t,n)=>{r.append(button(t,()=>{const outcome=rate(c,n);if(n===0)queue.push({c,ready:outcome.due});next()},true))});controls.append(r)}else controls.append(E('p','muted','Intenta recordarla antes de girar la tarjeta.'))}
  flip.onclick=()=>{flipped=!flipped;draw()};draw();p.append(flip,controls);root.append(p);
 }
+function attachCoach(cards,scope,onExit){
+ if(!window.WordCoach)return;
+ window.WordCoach.attach({root,cards,progress,save,onExit,scope:'pdf:'+scope,onArchive:c=>{progress.cards[c.id]={...cardStatus(c),bucket:'known',due:0};save()}});
+}
 const FOLDERS=[['known','✅ Ya me las sé','Archivadas: no aparecerán en el repaso habitual ni en las tarjetas aleatorias.'],['hard','🟠 Difícil','Estudia cuando quieras las palabras que has marcado como difíciles.'],['again','🔴 Otra vez','Vuelve a estudiar estas palabras sin esperar al siguiente repaso.'],['good','🔵 Bien','Palabras que siguen en el repaso espaciado.']];
 function folders(){
  clear();top('Mis palabras clasificadas · PDF B2','Cada palabra se guarda según tu última valoración. Las respuestas anteriores a esta actualización conservan su progreso, sin carpeta.');root.append(button('← Mi vocabulario',home,true));
- const grid=E('div','category-grid');FOLDERS.forEach(([key,label,desc])=>{const b=E('button','category-card');b.append(E('strong','',label),E('small','',ALL.filter(c=>cardStatus(c).bucket===key).length+' palabras'),E('span','',desc));b.onclick=()=>folder(key);grid.append(b)});root.append(grid);
+ const grid=E('div','category-grid');FOLDERS.forEach(([key,label,desc])=>{const b=E('button','category-card');b.append(E('strong','',label),E('small','',ALL.filter(c=>cardStatus(c).bucket===key).length+' palabras'),E('span','',desc));b.onclick=()=>folder(key);grid.append(b)});root.append(grid);attachCoach(ALL,'weak',folders);
 }
 function folder(key){
  const entry=FOLDERS.find(f=>f[0]===key);if(!entry)return;
  clear();top(entry[1],entry[2]);root.append(button('← Mis palabras',folders,true));
- const cards=ALL.filter(c=>cardStatus(c).bucket===key),study=button('Estudiar esta carpeta ('+cards.length+')',()=>start(cards,true));study.disabled=!cards.length;root.append(study);
+ const cards=ALL.filter(c=>cardStatus(c).bucket===key),study=button('Estudiar esta carpeta ('+cards.length+')',()=>start(cards,true));study.disabled=!cards.length;root.append(study);if(key==='hard'||key==='again')attachCoach(cards,key,()=>folder(key));
  const input=E('input','field');input.placeholder='Buscar en inglés o español';input.setAttribute('aria-label','Buscar palabras en esta carpeta');const list=E('section','panel folder-list');root.append(input,list);
  function draw(){list.replaceChildren();const q=input.value.trim().toLowerCase(),found=cards.filter(c=>(c.en+' '+c.es).toLowerCase().includes(q));if(!found.length)list.append(E('p','muted',cards.length?'Sin resultados.':'Todavía no hay palabras en esta carpeta.'));
  found.forEach(c=>{const row=E('div','word-row'),actions=E('div','row');row.append(E('strong','',c.en),E('span','',c.es));actions.append(button('Estudiar',()=>start([c],true),true));if(key==='known')actions.append(button('Devolver al repaso',()=>{progress.cards[c.id]={...cardStatus(c),bucket:'good',due:Date.now()};save();folder(key)},true));row.append(actions);list.append(row)})}input.oninput=draw;draw();

@@ -8,3 +8,14 @@
 
 
 .folder-list .word-row{flex-wrap:wrap;align-items:center}.folder-list .word-row>.row{width:100%}.folder-list .word-row>strong,.folder-list .word-row>span{overflow-wrap:anywhere;max-width:100%}.folder-list .word-row>span{text-align:left}
+
+/* Recuerdo activo: controles y resultados adaptados al móvil. */
+.coach .btn,.coach-results .btn{margin:4px 6px 4px 0}
+.coach-translation{font-size:22px;color:#173249}
+.coach-table{overflow-x:auto;margin:20px 0}
+.coach-results{width:100%;border-collapse:collapse;font-size:14px}
+.coach-results th,.coach-results td{text-align:left;vertical-align:top;border-bottom:1px solid #dce6ed;padding:12px 8px;overflow-wrap:anywhere}
+.coach-results th{background:#e7eef2}
+.coach-results .btn{padding:9px;font-size:12px}
+label.question{display:block}
+@media(max-width:420px){.coach-results{font-size:12px}.coach-results th,.coach-results td{padding:10px 5px}.coach-results .btn{font-size:11px}}

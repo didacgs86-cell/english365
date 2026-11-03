@@ -1,14 +1,36 @@
-English365: palabras clasificadas
-Cambio preparado sobre main, commit 69e0626be211e03899442aead1214ef6fa6bdca7.
-Todavía NO publicado: GitHub rechazó la escritura (403, Resource not accessible by integration).
+English365 2.11 · Aprender palabras difíciles y Otra vez
 
-Para aplicarlo manualmente: reemplaza los cuatro archivos de este ZIP en la raíz del repositorio english365 y confirma los cambios. Tras publicarse GitHub Pages, cierra y vuelve a abrir la app o recarga dos veces. No borres los datos del navegador.
+INSTALAR DESDE IPHONE
+1. Guarda y descomprime este ZIP en Archivos.
+2. Abre en Safari https://github.com/didacgs86-cell/english365/upload/main
+3. Pulsa Choose your files y selecciona los SIETE archivos:
+   index.html
+   mi-vocabulario-b2.html
+   word-coach.js
+   app.js
+   mi-vocabulario-b2.js
+   style.css
+   sw.js
+4. Sube estos archivos sueltos en la raíz del repositorio, donde ya están app.js e index.html.
+   No subas este texto, el ZIP ni una carpeta contenedora.
+5. Espera a que termine la carga y pulsa Commit changes, directamente a main.
+6. Tras publicarse la web, cierra y vuelve a abrir English365. Si aún ves la versión anterior, recarga de nuevo. No borres los datos del navegador.
+Este paquete contiene también la clasificación anterior; sustituye al ZIP anterior.
 
-Fácil: carpeta Ya me las sé, excluida de las sesiones habituales de flashcards.
-Difícil / Otra vez: carpetas para estudiar a voluntad.
-Bien: mantiene la repetición espaciada.
-Acceso: Mis palabras clasificadas, tanto en Repaso/Vocabulario como en Mi vocabulario B2 PDF.
-Desde Ya me las sé se puede devolver una palabra al repaso.
-La última valoración determina su carpeta. Las respuestas históricas mantienen sus intervalos, pero no se pueden clasificar retrospectivamente porque no guardaban el botón pulsado.
-Se mantiene la misma clave de almacenamiento y el formato de exportación/importación.
-Comprobado: sintaxis y pruebas funcionales de clasificación, persistencia, exclusión de archivadas y devolución al repaso en ambas pantallas. No se pudo ejecutar la revisión visual con navegador en este entorno.
+CÓMO USARLO
+En Mis palabras clasificadas, entra en Difícil u Otra vez y pulsa Aprender estas palabras. En el panel general puedes practicar las dos carpetas juntas.
+Cada sesión selecciona hasta cinco palabras de esas carpetas, con prioridad para las que han completado menos sesiones.
+Primero lee y escucha cada palabra; después escribe la expresión inglesa a partir del español.
+Primera pista: primera letra. Segunda pista: forma y número de palabras. Ver respuesta muestra y cuenta como un intento con ayuda.
+Las palabras vuelven tras otras dos preguntas cuando las haya. Cada palabra necesita dos respuestas correctas sin ayuda. Si llega a cuatro intentos sin completarlas, pasa al resumen como Seguir practicando.
+El resumen permite practicar solo las que fallaste o necesitaste ayuda, aunque al final hayas conseguido recordarlas.
+No se cambia automáticamente la carpeta ni el calendario de flashcards. Solo Fácil · archivar mueve la palabra a Ya me las sé.
+Se guarda la posición, el texto escrito, las pistas y la respuesta comprobada. Guardar y salir permite retomarla desde Continuar sesión guardada en el mismo panel. Nueva sesión sustituye solo la sesión de ese panel.
+Las sesiones y estadísticas de práctica se incluyen al exportar/importar el progreso. Usa el mismo navegador y dispositivo para conservarlo; no hay sincronización automática.
+Se usa la pronunciación del dispositivo cuando esté disponible. Solo se muestran frases de ejemplo ya existentes; las tarjetas del PDF sin frase no reciben ejemplos inventados.
+Se admite el infinitivo con o sin to, mayúsculas, espacios y puntuación final; no se realiza corrección libre de sinónimos.
+
+COMPROBACIONES
+Sintaxis JavaScript correcta. Pruebas funcionales automatizadas con datos reales de la app: selección de hasta cinco, separación de carpetas, exclusión de archivadas, pistas, repetición, límites de intentos, respuesta escrita, pausa y recuperación de sesión, archivo manual, conservación del progreso anterior e importación.
+No se ha probado visualmente en un iPhone físico.
+No se han publicado cambios directamente a GitHub; este ZIP está listo para que los subas.
