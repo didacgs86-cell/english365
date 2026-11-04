@@ -1,26 +1,31 @@
-English365 2.12 · Frases para entender y recordar
+English365 2.13 · Sinónimos y antónimos
 
 NOVEDADES
-- Las 1.638 palabras de la versión de partida tienen al menos una frase de ejemplo con traducción al español.
-- Hay segundos ejemplos para varias expresiones con usos diferentes.
-- En Difícil y Otra vez: abre «Ver ejemplos y mi frase» debajo de cada palabra.
-- En «Aprender estas palabras»: aparecen al estudiar y después de comprobar la respuesta; permanecen ocultos durante el recuerdo sin ayuda.
-- En las flashcards: gira la tarjeta y abre los ejemplos.
-- «Ver traducción» permite intentar entender primero la frase inglesa.
-- «Escuchar frase» usa las voces de tu dispositivo cuando estén disponibles.
-- Puedes añadir, editar o eliminar una frase personal por palabra, con traducción opcional. Pulsa «Guardar mi frase» para conservarla.
-- Las frases personales se incluyen al exportar/importar el progreso. Se guardan en el mismo navegador y dispositivo; no se sincronizan automáticamente.
-- Se han corregido algunas erratas y significados evidentes del listado original, conservando todos los identificadores de las tarjetas. Las correcciones llevan una nota de uso.
-- No se modifica automáticamente la clasificación ni la programación de repasos.
+- Sinónimos y equivalentes cercanos, asociados al significado concreto de cada tarjeta.
+- Antónimos cuando hay una oposición habitual y útil.
+- Notas breves para distinguir matices, registros y variantes británicas/americanas.
+- 1.549 de las 1.638 tarjetas tienen al menos un equivalente u opuesto seleccionado. En las restantes se indica que no hay un equivalente o antónimo habitual seleccionado. No se fuerzan opuestos para nombres como ajo o aguacate.
+- Son alternativas de aprendizaje: no siempre se pueden intercambiar directamente ni tienen exactamente la misma estructura gramatical.
+- Se conservan todas las frases de ejemplo anteriores; no se añaden frases nuevas para los sinónimos o antónimos.
+- Se conservan las frases personales y su exportación/importación.
+- Se conserva la clasificación y el calendario de repasos. En los ejercicios de recuerdo se sigue pidiendo la expresión de la tarjeta; los sinónimos cercanos no se aceptan automáticamente como respuestas idénticas.
+- Se han corregido las grafías scrape y sports programme en las dos tarjetas correspondientes, manteniendo sus identificadores.
+
+DÓNDE ENCONTRARLO
+1. Mis palabras clasificadas > Difícil u Otra vez.
+2. Abre «Ver sinónimos, antónimos y ejemplos» debajo de una palabra.
+3. En «Aprender estas palabras», verás las relaciones al estudiar y después de comprobar una respuesta; se mantienen ocultas durante el recuerdo sin ayuda.
+4. En las flashcards aparecen al girar la tarjeta.
 
 INSTALAR DESDE IPHONE
 1. En English365, pulsa «Exportar progreso» para guardar una copia antes de actualizar.
-2. Descarga este ZIP y descomprímelo en Archivos.
+2. Descarga el ZIP y descomprímelo en Archivos.
 3. Abre en Safari:
    https://github.com/didacgs86-cell/english365/upload/main
-4. En «Choose your files», selecciona estos OCHO archivos sueltos:
+4. En «Choose your files», selecciona estos NUEVE archivos sueltos:
    index.html
    mi-vocabulario-b2.html
+   word-relations.js
    word-examples.js
    word-coach.js
    app.js
@@ -31,15 +36,17 @@ INSTALAR DESDE IPHONE
    No subas el ZIP, este texto ni una carpeta contenedora.
    Conserva los demás archivos que ya tiene el repositorio.
 6. Espera a que termine la carga y pulsa «Commit changes» en main.
-7. Cuando termine la publicación de GitHub Pages, cierra y vuelve a abrir English365. Recarga si aún aparece la versión anterior. No borres los datos del navegador.
-8. Entra en «Mis palabras clasificadas» > «Difícil» u «Otra vez» y abre «Ver ejemplos y mi frase».
+7. Cuando termine la publicación de GitHub Pages, cierra y vuelve a abrir English365. Recarga si aún ves la versión anterior. No borres los datos del navegador.
 
-Este ZIP actualiza la versión 2.11 que preparamos anteriormente; incluye los mismos siete archivos más word-examples.js. No necesitas subir los ZIP anteriores.
+Este paquete contiene también las mejoras de carpetas, sesiones y frases de las versiones anteriores. Si ya tienes instalada la versión 2.11 o 2.12, basta con este ZIP; no necesitas volver a subir los anteriores.
 No se han publicado cambios directamente en GitHub.
+Las relaciones y los ejemplos vienen incluidos en la app, sin consultas externas ni suscripción. El audio de las frases anteriores depende de las voces disponibles en tu dispositivo.
 
 VALIDACIÓN
-- Sintaxis de todos los JavaScript del paquete.
-- Cobertura de ejemplos bilingües para las 1.638 tarjetas de la versión de partida.
-- Pruebas funcionales de las dos páginas: carpetas, flashcards, sesiones de estudio, ejemplos ocultos durante el recuerdo y visibles tras comprobar.
-- Añadir, recuperar y eliminar frases personales; solicitudes de audio; conservación de clasificaciones y repasos; exportación e importación; recuperación de sesiones; tratamiento de errores de guardado; texto seguro y dependencias del caché.
-- No se ha probado visualmente en un iPhone físico. La reproducción de voz depende de las voces disponibles en el dispositivo.
+- Sintaxis de todos los JavaScript del paquete e integridad del ZIP.
+- Cobertura de relaciones para 1.549 tarjetas; distinción de significados como flight = vuelo y flight = tramo de escaleras.
+- Visualización en el DOM, tratamiento seguro del texto y dependencias del caché.
+- Todas las frases de ejemplo anteriores se mantienen sin cambios.
+- Pruebas funcionales de las dos páginas: carpetas, flashcards, estudio, recuerdo y recuperación de sesiones.
+- Guardado/recuperación/eliminación de frases personales, conservación de clasificaciones y repasos, exportación/importación y tratamiento de errores de guardado.
+- No se ha probado visualmente en un iPhone físico.
