@@ -1,37 +1,52 @@
-English365 3.0 · Tu inglés, con sentido
+English365 3.1 · Irregulares, idioms y conversación
 
-QUÉ CAMBIA
-- Nueva interfaz completa: navegación lateral en ordenador y barra inferior en móvil; portada con el siguiente paso, repaso y accesos a tus palabras.
-- Búsqueda directa en inglés y español de las 1.638 palabras, incluyendo la colección del documento B2.
-- Categorías temáticas más claras y acceso a la colección completa del documento sin asignarle categorías gramaticales no revisadas.
-- Pronunciación y lectura en voz alta eliminadas de toda la app: tarjetas, ejemplos, sesiones y diálogos.
-- Los diálogos pasan a ser lectura, selección de respuestas y escritura.
-- Se conservan las frases, traducciones, sinónimos, antónimos y frases personales.
+NOVEDADES
+1. VERBOS IRREGULARES
+   144 verbos ordenados alfabéticamente, con infinitivo, pasado, participio y significado.
+   Variantes británicas y americanas incluidas, con notas de uso.
+   Filtros AAA, ABB, ABA y ABC, calculados con la primera variante de cada forma.
+   Puedes ocultar las soluciones de la tabla.
+   Práctica escrita: solo pasado, solo participio o ambas formas; hasta 10 verbos por sesión.
+   Basta con una variante válida. Si escribes varias separadas por /, todas deben ser válidas.
+   Los errores vuelven una vez más, después de otras preguntas cuando las haya.
+   Guardar y salir permite continuar la sesión más adelante.
+   Se accede desde Vocabulario > 144 irregulares o desde Por tipo de palabra > Verbos.
 
-NUEVO: LABORATORIO DE USO
-52 lecciones y 104 situaciones originales:
-- No las confundas: actually/currently, borrow/lend, sensible/sensitive, rise/raise, job/work y otras diferencias frecuentes.
-- Combinaciones naturales: make a decision, do homework, interested in, good at, heavy rain, strong wind y otras.
-Cada situación tiene dos pasos: elige la palabra y elige el motivo. La corrección aparece después de los dos pasos, con traducción y explicación.
-Puedes pedir una pista; cuenta como ayuda y no como consolidación sin ayuda.
-La práctica mixta selecciona hasta ocho situaciones. Da prioridad a las que hay que afianzar, a los repasos vencidos y a las situaciones nuevas.
-Un error vuelve a aparecer después de otras situaciones cuando las haya. Se repite una vez por sesión y queda en «Solo mis errores» si aún necesita afianzarse.
-Al acertar sin ayuda en repasos posteriores se programan intervalos de 1, 3, 7 y 14 días. Repetir una situación varias veces el mismo día no aumenta su nivel artificialmente.
-Puedes guardar y salir, y continuar la sesión después. Los datos del laboratorio se incluyen al exportar/importar el progreso.
-El laboratorio tiene un historial propio. No cambia automáticamente las carpetas ni el calendario de las flashcards.
+2. IDIOMS
+   60 expresiones con significado figurado, notas de registro y ejemplos bilingües originales.
+   Incluye tarjetas, test de significados, recuerdo escrito y completar frases cuando la expresión aparece en el ejemplo.
+   Acceso: Vocabulario > 60 idioms.
 
-ANTES DE CAMBIAR DE DISPOSITIVO
-Si has estudiado en el iPhone, exporta el progreso desde allí.
-Después, en el ordenador: Inicio > Gestionar mis datos > Importar progreso.
-Los datos se guardan por navegador y dispositivo. No hay sincronización automática.
-Importar sustituye los datos del navegador de destino, por lo que conviene exportar antes cualquier progreso que quieras conservar.
+3. COLETILLAS Y RESPUESTAS BREVES
+   48 expresiones como I see, Got it, Right y That makes sense.
+   Agrupadas por intención: comprender, mostrar acuerdo, mostrar interés, aclarar, ganar tiempo, discrepar con tacto, cambiar/retomar tema y responder/cerrar.
+   Notas sobre el tono y el registro: comprender no significa necesariamente estar de acuerdo.
+   Práctica de respuestas en situaciones escritas, con feedback y repetición de errores.
+   Acceso: Vocabulario > 48 coletillas; también hay un acceso desde Diálogos.
+   Las respuestas mostradas son ejemplos adecuados para la intención, no las únicas respuestas válidas posibles.
 
-INSTALAR EN GITHUB DESDE EL ORDENADOR
-1. Exporta una copia de tu progreso actual.
-2. Descarga y descomprime el ZIP.
-3. Abre:
-   https://github.com/didacgs86-cell/english365/upload/main
-4. Arrastra a la página los DIECISÉIS archivos de la app:
+4. AMPLIACIÓN DE LOS SIETE TEMAS
+   40 fichas nuevas por tema; 280 en total.
+   Cada tema añade sustantivos, verbos y phrasal verbs, adjetivos, adverbios y expresiones.
+   Salud y medicina, Viajes y turismo, Trabajo y empresa, Medio ambiente, Sociedad y actualidad, Educación, Cultura y arte.
+   Ejemplos de viajes: buckle your seat belt, validate your ticket, fully booked, abroad.
+   Los filtros de cada tema permiten estudiar y practicar solo verbos, adjetivos, etc.
+   El filtro «Verbos» reúne verbos y phrasal verbs. Los ejercicios se ajustan a la selección.
+
+CONTENIDO Y PROGRESO
+- 388 fichas nuevas en el catálogo: 280 temáticas + 60 idioms + 48 coletillas.
+- El catálogo pasa de 1.638 a 2.026 fichas. Puede haber palabras repetidas en temas distintos con usos y ejemplos diferentes.
+- La colección de 144 irregulares tiene su propia tabla e historial de práctica.
+- Se conservan los identificadores, las carpetas y el progreso de las fichas anteriores.
+- La práctica nueva de irregulares/coletillas tiene un historial independiente y no cambia automáticamente las valoraciones de las tarjetas.
+- Exportar/importar incluye las sesiones y estadísticas nuevas.
+- Se mantienen la interfaz, el laboratorio y la eliminación de pronunciación de la versión 3.0. No se añade audio.
+
+INSTALAR EN GITHUB
+1. Exporta una copia del progreso desde Inicio > Gestionar mis datos.
+2. Descarga y descomprime el ZIP en el ordenador.
+3. Abre https://github.com/didacgs86-cell/english365/upload/main
+4. Sube estos DIECIOCHO archivos sueltos a la raíz del repositorio, sustituyendo los existentes:
    index.html
    mi-vocabulario-b2.html
    app.js
@@ -48,31 +63,26 @@ INSTALAR EN GITHUB DESDE EL ORDENADOR
    mi-vocabulario-b2.js
    usage-content.js
    usage-lab.js
-5. Deben quedar sueltos en la raíz, junto al index.html que ya tienes. No subas una carpeta contenedora ni el ZIP. No hace falta subir este texto.
-6. Pulsa Commit changes.
-7. Cuando termine la publicación de GitHub Pages, abre la web y recarga. Si aún ves la versión anterior, cierra y vuelve a abrir la app. No borres los datos del navegador.
+   expanded-content.js
+   expanded-practice.js
+5. No hace falta subir los dos archivos .txt. No subas el ZIP ni una carpeta contenedora.
+6. Pulsa Commit changes y espera a que termine la publicación.
+7. Recarga la app. Si ves la versión anterior, cierra y vuelve a abrirla. No borres los datos del navegador.
+Este paquete contiene la app completa, incluidas las mejoras previas; basta con este ZIP.
+No se han publicado cambios directamente a GitHub.
 
-Este ZIP incluye la app completa y las mejoras anteriores. No necesitas subir los ZIP anteriores.
-No se han publicado cambios directamente en GitHub.
+FUENTES Y REUTILIZACIÓN
+Lee FUENTES-Y-CONTENIDO.txt para las referencias y la decisión de no importar entradas de WordReference.
+Las traducciones, notas y ejemplos nuevos son de redacción propia. Las formas verbales y usos se han contrastado con referencias lingüísticas; no se han copiado sus explicaciones ni ejercicios.
+Esto describe el trabajo realizado y las condiciones consultadas, no una garantía jurídica sobre cualquier reutilización futura ni sobre los documentos aportados en versiones anteriores.
 
 VALIDACIÓN
-- Comparación de los archivos de partida con la versión publicada en tu repositorio: coincidían.
-- Sintaxis de todos los JavaScript y validación de las 52 lecciones y sus 104 situaciones.
-- Pruebas en Chromium con tamaño de ordenador (1512 px) y móvil (390 px), y revisión visual de capturas.
-- Navegación, búsqueda, frases personales y ausencia de controles/código de lectura en voz alta.
-- Elección y razonamiento, recuperación de sesiones, errores y segunda oportunidad.
-- Uso de pistas e intervalos: no se aumenta el nivel con repeticiones el mismo día.
-- Conservación del progreso anterior y exportación/importación con los nuevos datos.
-- Página anterior del vocabulario PDF y navegación sin conexión tras la primera carga.
-No se ha probado en un iPhone físico ni se ha hecho una revisión lingüística externa del contenido.
-
-REFERENCIAS DE PRODUCTO REVISADAS
-Memrise: organización del aprendizaje por situaciones y avances recientes de su experiencia.
-https://www.memrise.com/blog/changes-to-the-memrise-app
-Quizlet: sesiones enfocadas y preguntas de práctica variadas.
-https://quizlet.com/tw/features/learn
-Babbel: acceso al repaso de vocabulario y repetición espaciada.
-https://support.babbel.com/hc/en-gb/articles/205600228-Vocab-workout-Review
-WordUp: aprendizaje contextual y visibilidad del vocabulario conocido.
-https://www.wordupapp.co/support
-La interfaz y las actividades nuevas son propias de English365; no se han copiado pantallas, textos ni material de estas apps.
+- Coincidencia de la versión de partida con los archivos publicados en GitHub.
+- Sintaxis JavaScript y estructura de las 388 fichas y los 144 verbos.
+- Todas las fichas nuevas tienen ejemplo y traducción.
+- Equilibrio de los siete temas y sus categorías.
+- Pruebas en navegador de escritorio (1512 px) y móvil (390 px), con revisión visual.
+- Tabla alfabética, filtros, variantes, práctica de uno o dos tiempos, errores, repetición y recuperación de sesión.
+- Idioms, coletillas sin revelar la respuesta en el enunciado y filtros de vocabulario temático.
+- Conservación del progreso anterior, exportación/importación, página PDF y funcionamiento sin conexión tras la primera carga.
+No se ha probado en un iPhone físico ni se ha encargado una revisión lingüística externa.
