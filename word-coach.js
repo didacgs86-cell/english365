@@ -19,7 +19,7 @@ function attach(options){
  if(!progress.learningStats||typeof progress.learningStats!=='object'||Array.isArray(progress.learningStats))progress.learningStats={};
  let s=progress.learningSessions[scope];
  if(!validSession(s,byId)){delete progress.learningSessions[scope];s=null}
- const box=node('section','panel spaced coach');box.append(node('h3','','Aprender estas palabras'),node('p','','Sesiones de hasta 5 palabras: escucha, recuerda por escrito y repite. Tu clasificación solo cambia si eliges Fácil.'));
+ const box=node('section','panel spaced coach');box.append(node('h3','','Aprender estas palabras'),node('p','','Sesiones de hasta 5 palabras: lee frases de ejemplo, escucha, recuerda por escrito y repite. Tu clasificación solo cambia si eliges Fácil.'));
  if(s)box.append(button(s.phase==='summary'?'Ver última sesión':'Continuar sesión guardada',render));
  const launch=button(s?'Nueva sesión · sustituir la guardada':'Aprender estas palabras · 5 por sesión',()=>start(eligible));launch.disabled=!eligible.length;box.append(launch);
  if(!eligible.length)box.append(node('p','muted','Marca alguna palabra como Difícil u Otra vez para empezar.'));
@@ -42,7 +42,7 @@ function attach(options){
  function study(){
   const c=byId.get(s.ids[s.studyIndex]);heading('Entender y escuchar',`Palabra ${s.studyIndex+1} de ${s.ids.length} · Después tendrás que escribirla de memoria.`);
   const p=node('section','panel');p.append(node('h2','',c.en),node('p','coach-translation',c.es),button('🔊 Escuchar pronunciación',()=>audio(c.en),true));
-  if(example(c))p.append(node('p','lesson',example(c)));
+  if(window.WordExamples)p.append(window.WordExamples.render(c,{progress,save}));else if(example(c))p.append(node('p','lesson',example(c)));
   p.append(button(s.studyIndex+1===s.ids.length?'Empezar a recordar →':'Siguiente palabra →',()=>{if(s.studyIndex+1<s.ids.length)s.studyIndex++;else s.phase='recall';commit();render()}));root.append(p);
  }
  function recall(){
@@ -63,7 +63,7 @@ function attach(options){
   if(s.hint>0){const bare=c.en.replace(/^to /i,'');p.append(node('p','hint',s.hint===1?'Primera letra de la palabra principal: '+bare.charAt(0).toUpperCase():'Forma: '+bare.replace(/[A-Za-z]/g,'_')+' · '+bare.split(/\s+/).length+' palabra(s)'));}
   if(s.answer){
    const feedback=node('div','answer'+(!s.answer.ok?' bad':''));feedback.setAttribute('role','status');feedback.append(node('strong','',s.answer.ok?(s.answer.helped?'Correcto con ayuda':'✓ Correcto sin ayuda'):'Respuesta: '+c.en),node('p','',c.en+' — '+c.es));
-   if(example(c))feedback.append(node('p','',example(c)));
+   if(window.WordExamples)feedback.append(window.WordExamples.render(c,{progress,save}));else if(example(c))feedback.append(node('p','',example(c)));
    feedback.append(button('🔊 Escuchar respuesta',()=>audio(c.en),true),node('p','muted',r.correct>=2?'Ya la has recordado dos veces sin ayuda.':r.attempts>=4?'La guardamos para seguir practicando en otra ronda.':'Volverá a aparecer después de otras palabras cuando las haya.'));
    p.append(feedback,button('Continuar →',advance));
   }

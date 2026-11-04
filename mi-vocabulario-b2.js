@@ -6,7 +6,7 @@ let progress={version:1,cards:{},grammar:{},practice:{}};
 try{const p=JSON.parse(localStorage.getItem(KEY));if(p?.version===1&&p.cards&&p.grammar)progress=p;}catch(e){}
 let queue=[], current=null, lastView='home';
 const E=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;};
-function save(){progress.updatedAt=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(progress))}
+function save(){progress.updatedAt=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(progress));return true}catch(e){alert('No se pudo guardar. Revisa el almacenamiento del navegador.');return false}}
 function cardStatus(c){return progress.cards[c.id]||{step:0,interval:0,due:0,reps:0,lapses:0}}
 function known(c){return cardStatus(c).bucket==='known'}
 function due(c){return !known(c)&&(!progress.cards[c.id]||cardStatus(c).due<=Date.now())}
@@ -25,7 +25,7 @@ function start(cards,includeKnown=false){cards=cards.filter(c=>includeKnown||!kn
 function rate(c,n){const x={...cardStatus(c)};x.reps++;let d=x.interval||0;if(n===0){x.step=0;x.interval=0;x.lapses++;x.due=Date.now()+60000}else{d=n===1?Math.max(1,Math.round((d||1)*1.3)):n===2?(d===0?1:d===1?3:Math.round(d*2.2)):(d===0?4:Math.max(4,Math.round(d*3)));x.step++;x.interval=d;x.due=Date.now()+d*86400000}x.bucket=['again','hard','good','known'][n];if(n===3)x.due=0;progress.cards[c.id]=x;save();return x}
 function next(){clear();const i=queue.findIndex(x=>x.ready<=Date.now());if(i<0){if(!queue.length){top('Sesión terminada','Tus palabras se han guardado según tu última valoración.');root.append(button('Ver mis palabras clasificadas',folders),button('Volver a mi vocabulario',home,true));return}top('Repasa las difíciles','Puedes volver a estudiar cuando toque su siguiente repaso.');root.append(button('Terminar por ahora',home));return}
  const e=queue.splice(i,1)[0],c=e.c;top('Flashcards · PDF B2',`${queue.length+1} tarjetas por completar en esta sesión`);root.append(button('← Salir',home,true));const p=E('section','panel spaced');p.append(E('span','tag',`Página ${c.example.match(/\d+/)?.[0]||'—'} del PDF`));const flip=E('button','flip');let flipped=false;const controls=E('div');
- function draw(){flip.replaceChildren(E('small','',flipped?'TRADUCCIÓN':'INGLÉS'),E('strong','',flipped?c.es:c.en),E('small','',flipped?'Fácil: archivar · Difícil / Otra vez: guardar para repasar':'Toca para ver la respuesta'));controls.replaceChildren();if(flipped){const r=E('div','ratings');['Otra vez','Difícil','Bien','Fácil'].forEach((t,n)=>{r.append(button(t,()=>{const outcome=rate(c,n);if(n===0)queue.push({c,ready:outcome.due});next()},true))});controls.append(r)}else controls.append(E('p','muted','Intenta recordarla antes de girar la tarjeta.'))}
+ function draw(){flip.replaceChildren(E('small','',flipped?'TRADUCCIÓN':'INGLÉS'),E('strong','',flipped?c.es:c.en),E('small','',flipped?'Fácil: archivar · Difícil / Otra vez: guardar para repasar':'Toca para ver la respuesta'));controls.replaceChildren();if(flipped){const r=E('div','ratings');['Otra vez','Difícil','Bien','Fácil'].forEach((t,n)=>{r.append(button(t,()=>{const outcome=rate(c,n);if(n===0)queue.push({c,ready:outcome.due});next()},true))});controls.append(r);if(window.WordExamples)controls.append(window.WordExamples.render(c,{progress,save,collapsed:true}))}else controls.append(E('p','muted','Intenta recordarla antes de girar la tarjeta.'))}
  flip.onclick=()=>{flipped=!flipped;draw()};draw();p.append(flip,controls);root.append(p);
 }
 function attachCoach(cards,scope,onExit){
@@ -43,7 +43,7 @@ function folder(key){
  const cards=ALL.filter(c=>cardStatus(c).bucket===key),study=button('Estudiar esta carpeta ('+cards.length+')',()=>start(cards,true));study.disabled=!cards.length;root.append(study);if(key==='hard'||key==='again')attachCoach(cards,key,()=>folder(key));
  const input=E('input','field');input.placeholder='Buscar en inglés o español';input.setAttribute('aria-label','Buscar palabras en esta carpeta');const list=E('section','panel folder-list');root.append(input,list);
  function draw(){list.replaceChildren();const q=input.value.trim().toLowerCase(),found=cards.filter(c=>(c.en+' '+c.es).toLowerCase().includes(q));if(!found.length)list.append(E('p','muted',cards.length?'Sin resultados.':'Todavía no hay palabras en esta carpeta.'));
- found.forEach(c=>{const row=E('div','word-row'),actions=E('div','row');row.append(E('strong','',c.en),E('span','',c.es));actions.append(button('Estudiar',()=>start([c],true),true));if(key==='known')actions.append(button('Devolver al repaso',()=>{progress.cards[c.id]={...cardStatus(c),bucket:'good',due:Date.now()};save();folder(key)},true));row.append(actions);list.append(row)})}input.oninput=draw;draw();
+ found.forEach(c=>{const row=E('div','word-row'),actions=E('div','row');row.append(E('strong','',c.en),E('span','',c.es));actions.append(button('Estudiar',()=>start([c],true),true));if(key==='known')actions.append(button('Devolver al repaso',()=>{progress.cards[c.id]={...cardStatus(c),bucket:'good',due:Date.now()};save();folder(key)},true));row.append(actions);if((key==='hard'||key==='again')&&window.WordExamples)row.append(window.WordExamples.render(c,{progress,save,collapsed:true}));list.append(row)})}input.oninput=draw;draw();
 }
 
 home();

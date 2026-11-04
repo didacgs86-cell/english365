@@ -1,36 +1,45 @@
-English365 2.11 · Aprender palabras difíciles y Otra vez
+English365 2.12 · Frases para entender y recordar
+
+NOVEDADES
+- Las 1.638 palabras de la versión de partida tienen al menos una frase de ejemplo con traducción al español.
+- Hay segundos ejemplos para varias expresiones con usos diferentes.
+- En Difícil y Otra vez: abre «Ver ejemplos y mi frase» debajo de cada palabra.
+- En «Aprender estas palabras»: aparecen al estudiar y después de comprobar la respuesta; permanecen ocultos durante el recuerdo sin ayuda.
+- En las flashcards: gira la tarjeta y abre los ejemplos.
+- «Ver traducción» permite intentar entender primero la frase inglesa.
+- «Escuchar frase» usa las voces de tu dispositivo cuando estén disponibles.
+- Puedes añadir, editar o eliminar una frase personal por palabra, con traducción opcional. Pulsa «Guardar mi frase» para conservarla.
+- Las frases personales se incluyen al exportar/importar el progreso. Se guardan en el mismo navegador y dispositivo; no se sincronizan automáticamente.
+- Se han corregido algunas erratas y significados evidentes del listado original, conservando todos los identificadores de las tarjetas. Las correcciones llevan una nota de uso.
+- No se modifica automáticamente la clasificación ni la programación de repasos.
 
 INSTALAR DESDE IPHONE
-1. Guarda y descomprime este ZIP en Archivos.
-2. Abre en Safari https://github.com/didacgs86-cell/english365/upload/main
-3. Pulsa Choose your files y selecciona los SIETE archivos:
+1. En English365, pulsa «Exportar progreso» para guardar una copia antes de actualizar.
+2. Descarga este ZIP y descomprímelo en Archivos.
+3. Abre en Safari:
+   https://github.com/didacgs86-cell/english365/upload/main
+4. En «Choose your files», selecciona estos OCHO archivos sueltos:
    index.html
    mi-vocabulario-b2.html
+   word-examples.js
    word-coach.js
    app.js
    mi-vocabulario-b2.js
    style.css
    sw.js
-4. Sube estos archivos sueltos en la raíz del repositorio, donde ya están app.js e index.html.
-   No subas este texto, el ZIP ni una carpeta contenedora.
-5. Espera a que termine la carga y pulsa Commit changes, directamente a main.
-6. Tras publicarse la web, cierra y vuelve a abrir English365. Si aún ves la versión anterior, recarga de nuevo. No borres los datos del navegador.
-Este paquete contiene también la clasificación anterior; sustituye al ZIP anterior.
+5. Súbelos a la raíz del repositorio, donde ya están index.html y app.js. Sustituye las versiones existentes.
+   No subas el ZIP, este texto ni una carpeta contenedora.
+   Conserva los demás archivos que ya tiene el repositorio.
+6. Espera a que termine la carga y pulsa «Commit changes» en main.
+7. Cuando termine la publicación de GitHub Pages, cierra y vuelve a abrir English365. Recarga si aún aparece la versión anterior. No borres los datos del navegador.
+8. Entra en «Mis palabras clasificadas» > «Difícil» u «Otra vez» y abre «Ver ejemplos y mi frase».
 
-CÓMO USARLO
-En Mis palabras clasificadas, entra en Difícil u Otra vez y pulsa Aprender estas palabras. En el panel general puedes practicar las dos carpetas juntas.
-Cada sesión selecciona hasta cinco palabras de esas carpetas, con prioridad para las que han completado menos sesiones.
-Primero lee y escucha cada palabra; después escribe la expresión inglesa a partir del español.
-Primera pista: primera letra. Segunda pista: forma y número de palabras. Ver respuesta muestra y cuenta como un intento con ayuda.
-Las palabras vuelven tras otras dos preguntas cuando las haya. Cada palabra necesita dos respuestas correctas sin ayuda. Si llega a cuatro intentos sin completarlas, pasa al resumen como Seguir practicando.
-El resumen permite practicar solo las que fallaste o necesitaste ayuda, aunque al final hayas conseguido recordarlas.
-No se cambia automáticamente la carpeta ni el calendario de flashcards. Solo Fácil · archivar mueve la palabra a Ya me las sé.
-Se guarda la posición, el texto escrito, las pistas y la respuesta comprobada. Guardar y salir permite retomarla desde Continuar sesión guardada en el mismo panel. Nueva sesión sustituye solo la sesión de ese panel.
-Las sesiones y estadísticas de práctica se incluyen al exportar/importar el progreso. Usa el mismo navegador y dispositivo para conservarlo; no hay sincronización automática.
-Se usa la pronunciación del dispositivo cuando esté disponible. Solo se muestran frases de ejemplo ya existentes; las tarjetas del PDF sin frase no reciben ejemplos inventados.
-Se admite el infinitivo con o sin to, mayúsculas, espacios y puntuación final; no se realiza corrección libre de sinónimos.
+Este ZIP actualiza la versión 2.11 que preparamos anteriormente; incluye los mismos siete archivos más word-examples.js. No necesitas subir los ZIP anteriores.
+No se han publicado cambios directamente en GitHub.
 
-COMPROBACIONES
-Sintaxis JavaScript correcta. Pruebas funcionales automatizadas con datos reales de la app: selección de hasta cinco, separación de carpetas, exclusión de archivadas, pistas, repetición, límites de intentos, respuesta escrita, pausa y recuperación de sesión, archivo manual, conservación del progreso anterior e importación.
-No se ha probado visualmente en un iPhone físico.
-No se han publicado cambios directamente a GitHub; este ZIP está listo para que los subas.
+VALIDACIÓN
+- Sintaxis de todos los JavaScript del paquete.
+- Cobertura de ejemplos bilingües para las 1.638 tarjetas de la versión de partida.
+- Pruebas funcionales de las dos páginas: carpetas, flashcards, sesiones de estudio, ejemplos ocultos durante el recuerdo y visibles tras comprobar.
+- Añadir, recuperar y eliminar frases personales; solicitudes de audio; conservación de clasificaciones y repasos; exportación e importación; recuperación de sesiones; tratamiento de errores de guardado; texto seguro y dependencias del caché.
+- No se ha probado visualmente en un iPhone físico. La reproducción de voz depende de las voces disponibles en el dispositivo.
