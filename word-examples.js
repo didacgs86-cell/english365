@@ -121,7 +121,6 @@ function get(card){
 }
 function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function button(text,fn){const e=node('button','btn secondary',text);e.type='button';e.onclick=fn;return e}
-function speak(text){if(!('speechSynthesis'in window)){alert('La lectura en voz alta no está disponible en este navegador.');return}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=.85;window.speechSynthesis.speak(u)}
 function cleanCustom(value,ids){
  const out=Object.create(null);
  if(!value||typeof value!=='object'||Array.isArray(value))return out;
@@ -140,7 +139,7 @@ function render(card,{progress,save,collapsed=false,editable=true}={}){
  examples.forEach((x,i)=>{
   const item=node('div','example-item');item.append(node('small','muted',x.personal?'Tu frase':`Ejemplo ${i+1}`));
   const en=node('p','example-en',x.en);en.lang='en';item.append(en);
-  const actions=node('div','row');actions.append(button('🔊 Escuchar frase',()=>speak(x.en)));
+  const actions=node('div','row');
   if(x.es){const translated=node('p','example-es',x.es);translated.hidden=true;const toggle=button('Ver traducción',()=>{translated.hidden=!translated.hidden;toggle.textContent=translated.hidden?'Ver traducción':'Ocultar traducción'});toggle.setAttribute('aria-expanded','false');toggle.addEventListener('click',()=>toggle.setAttribute('aria-expanded',String(!translated.hidden)));actions.append(toggle);item.append(actions,translated)}else item.append(actions);
   content.append(item);
  });

@@ -1,52 +1,78 @@
-English365 2.13 · Sinónimos y antónimos
+English365 3.0 · Tu inglés, con sentido
 
-NOVEDADES
-- Sinónimos y equivalentes cercanos, asociados al significado concreto de cada tarjeta.
-- Antónimos cuando hay una oposición habitual y útil.
-- Notas breves para distinguir matices, registros y variantes británicas/americanas.
-- 1.549 de las 1.638 tarjetas tienen al menos un equivalente u opuesto seleccionado. En las restantes se indica que no hay un equivalente o antónimo habitual seleccionado. No se fuerzan opuestos para nombres como ajo o aguacate.
-- Son alternativas de aprendizaje: no siempre se pueden intercambiar directamente ni tienen exactamente la misma estructura gramatical.
-- Se conservan todas las frases de ejemplo anteriores; no se añaden frases nuevas para los sinónimos o antónimos.
-- Se conservan las frases personales y su exportación/importación.
-- Se conserva la clasificación y el calendario de repasos. En los ejercicios de recuerdo se sigue pidiendo la expresión de la tarjeta; los sinónimos cercanos no se aceptan automáticamente como respuestas idénticas.
-- Se han corregido las grafías scrape y sports programme en las dos tarjetas correspondientes, manteniendo sus identificadores.
+QUÉ CAMBIA
+- Nueva interfaz completa: navegación lateral en ordenador y barra inferior en móvil; portada con el siguiente paso, repaso y accesos a tus palabras.
+- Búsqueda directa en inglés y español de las 1.638 palabras, incluyendo la colección del documento B2.
+- Categorías temáticas más claras y acceso a la colección completa del documento sin asignarle categorías gramaticales no revisadas.
+- Pronunciación y lectura en voz alta eliminadas de toda la app: tarjetas, ejemplos, sesiones y diálogos.
+- Los diálogos pasan a ser lectura, selección de respuestas y escritura.
+- Se conservan las frases, traducciones, sinónimos, antónimos y frases personales.
 
-DÓNDE ENCONTRARLO
-1. Mis palabras clasificadas > Difícil u Otra vez.
-2. Abre «Ver sinónimos, antónimos y ejemplos» debajo de una palabra.
-3. En «Aprender estas palabras», verás las relaciones al estudiar y después de comprobar una respuesta; se mantienen ocultas durante el recuerdo sin ayuda.
-4. En las flashcards aparecen al girar la tarjeta.
+NUEVO: LABORATORIO DE USO
+52 lecciones y 104 situaciones originales:
+- No las confundas: actually/currently, borrow/lend, sensible/sensitive, rise/raise, job/work y otras diferencias frecuentes.
+- Combinaciones naturales: make a decision, do homework, interested in, good at, heavy rain, strong wind y otras.
+Cada situación tiene dos pasos: elige la palabra y elige el motivo. La corrección aparece después de los dos pasos, con traducción y explicación.
+Puedes pedir una pista; cuenta como ayuda y no como consolidación sin ayuda.
+La práctica mixta selecciona hasta ocho situaciones. Da prioridad a las que hay que afianzar, a los repasos vencidos y a las situaciones nuevas.
+Un error vuelve a aparecer después de otras situaciones cuando las haya. Se repite una vez por sesión y queda en «Solo mis errores» si aún necesita afianzarse.
+Al acertar sin ayuda en repasos posteriores se programan intervalos de 1, 3, 7 y 14 días. Repetir una situación varias veces el mismo día no aumenta su nivel artificialmente.
+Puedes guardar y salir, y continuar la sesión después. Los datos del laboratorio se incluyen al exportar/importar el progreso.
+El laboratorio tiene un historial propio. No cambia automáticamente las carpetas ni el calendario de las flashcards.
 
-INSTALAR DESDE IPHONE
-1. En English365, pulsa «Exportar progreso» para guardar una copia antes de actualizar.
-2. Descarga el ZIP y descomprímelo en Archivos.
-3. Abre en Safari:
+ANTES DE CAMBIAR DE DISPOSITIVO
+Si has estudiado en el iPhone, exporta el progreso desde allí.
+Después, en el ordenador: Inicio > Gestionar mis datos > Importar progreso.
+Los datos se guardan por navegador y dispositivo. No hay sincronización automática.
+Importar sustituye los datos del navegador de destino, por lo que conviene exportar antes cualquier progreso que quieras conservar.
+
+INSTALAR EN GITHUB DESDE EL ORDENADOR
+1. Exporta una copia de tu progreso actual.
+2. Descarga y descomprime el ZIP.
+3. Abre:
    https://github.com/didacgs86-cell/english365/upload/main
-4. En «Choose your files», selecciona estos NUEVE archivos sueltos:
+4. Arrastra a la página los DIECISÉIS archivos de la app:
    index.html
    mi-vocabulario-b2.html
+   app.js
+   style.css
+   sw.js
+   manifest.webmanifest
+   icon.svg
+   content.js
+   vocabulario-b2-pdf.js
+   speaking.js
    word-relations.js
    word-examples.js
    word-coach.js
-   app.js
    mi-vocabulario-b2.js
-   style.css
-   sw.js
-5. Súbelos a la raíz del repositorio, donde ya están index.html y app.js. Sustituye las versiones existentes.
-   No subas el ZIP, este texto ni una carpeta contenedora.
-   Conserva los demás archivos que ya tiene el repositorio.
-6. Espera a que termine la carga y pulsa «Commit changes» en main.
-7. Cuando termine la publicación de GitHub Pages, cierra y vuelve a abrir English365. Recarga si aún ves la versión anterior. No borres los datos del navegador.
+   usage-content.js
+   usage-lab.js
+5. Deben quedar sueltos en la raíz, junto al index.html que ya tienes. No subas una carpeta contenedora ni el ZIP. No hace falta subir este texto.
+6. Pulsa Commit changes.
+7. Cuando termine la publicación de GitHub Pages, abre la web y recarga. Si aún ves la versión anterior, cierra y vuelve a abrir la app. No borres los datos del navegador.
 
-Este paquete contiene también las mejoras de carpetas, sesiones y frases de las versiones anteriores. Si ya tienes instalada la versión 2.11 o 2.12, basta con este ZIP; no necesitas volver a subir los anteriores.
+Este ZIP incluye la app completa y las mejoras anteriores. No necesitas subir los ZIP anteriores.
 No se han publicado cambios directamente en GitHub.
-Las relaciones y los ejemplos vienen incluidos en la app, sin consultas externas ni suscripción. El audio de las frases anteriores depende de las voces disponibles en tu dispositivo.
 
 VALIDACIÓN
-- Sintaxis de todos los JavaScript del paquete e integridad del ZIP.
-- Cobertura de relaciones para 1.549 tarjetas; distinción de significados como flight = vuelo y flight = tramo de escaleras.
-- Visualización en el DOM, tratamiento seguro del texto y dependencias del caché.
-- Todas las frases de ejemplo anteriores se mantienen sin cambios.
-- Pruebas funcionales de las dos páginas: carpetas, flashcards, estudio, recuerdo y recuperación de sesiones.
-- Guardado/recuperación/eliminación de frases personales, conservación de clasificaciones y repasos, exportación/importación y tratamiento de errores de guardado.
-- No se ha probado visualmente en un iPhone físico.
+- Comparación de los archivos de partida con la versión publicada en tu repositorio: coincidían.
+- Sintaxis de todos los JavaScript y validación de las 52 lecciones y sus 104 situaciones.
+- Pruebas en Chromium con tamaño de ordenador (1512 px) y móvil (390 px), y revisión visual de capturas.
+- Navegación, búsqueda, frases personales y ausencia de controles/código de lectura en voz alta.
+- Elección y razonamiento, recuperación de sesiones, errores y segunda oportunidad.
+- Uso de pistas e intervalos: no se aumenta el nivel con repeticiones el mismo día.
+- Conservación del progreso anterior y exportación/importación con los nuevos datos.
+- Página anterior del vocabulario PDF y navegación sin conexión tras la primera carga.
+No se ha probado en un iPhone físico ni se ha hecho una revisión lingüística externa del contenido.
+
+REFERENCIAS DE PRODUCTO REVISADAS
+Memrise: organización del aprendizaje por situaciones y avances recientes de su experiencia.
+https://www.memrise.com/blog/changes-to-the-memrise-app
+Quizlet: sesiones enfocadas y preguntas de práctica variadas.
+https://quizlet.com/tw/features/learn
+Babbel: acceso al repaso de vocabulario y repetición espaciada.
+https://support.babbel.com/hc/en-gb/articles/205600228-Vocab-workout-Review
+WordUp: aprendizaje contextual y visibilidad del vocabulario conocido.
+https://www.wordupapp.co/support
+La interfaz y las actividades nuevas son propias de English365; no se han copiado pantallas, textos ni material de estas apps.
